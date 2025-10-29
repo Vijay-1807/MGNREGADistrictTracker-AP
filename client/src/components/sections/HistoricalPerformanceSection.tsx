@@ -5,6 +5,7 @@ import { useLanguage } from '../../LanguageContext';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, AreaChart, Area, Legend } from 'recharts';
 import moment from 'moment';
 import { BorderBeam } from '../ui/border-beam';
+import { Footer } from '../Footer';
 
 // Custom hook for responsive chart height with debouncing
 const useChartHeight = () => {
@@ -22,7 +23,11 @@ const useChartHeight = () => {
         const width = window.innerWidth;
         let newHeight = 400;
         
-        if (width >= 2560) newHeight = 600;
+        // Mobile-first responsive heights
+        if (width < 480) newHeight = 300; // Very small mobile
+        else if (width < 640) newHeight = 350; // Small mobile
+        else if (width < 768) newHeight = 380; // Tablet portrait
+        else if (width >= 2560) newHeight = 600;
         else if (width >= 1920) newHeight = 500;
         else if (width >= 1400) newHeight = 450;
         else newHeight = 400;
@@ -280,14 +285,14 @@ export const HistoricalPerformanceSection: React.FC = () => {
     <div className="historical-section page">
       <div className="container">
         <div className="section-header text-center">
-          <h1 className="section-title text-xl md:text-2xl lg:text-3xl font-medium text-gray-800 mb-4">
+          <h1 className="section-title text-xl md:text-2xl lg:text-3xl font-medium text-gray-800 mb-1">
             <BarChart3 className="section-icon inline-block mr-3" />
             Historical Performance Analysis
           </h1>
         </div>
 
         {/* Enhanced controls with modern UI */}
-        <div className="toolbar glass-card mb-6">
+        <div className="toolbar glass-card mb-2">
           <div className="historical-controls flex flex-wrap gap-6 justify-center items-center p-4">
             <div className="control-group flex flex-col items-center">
               <label className="text-sm font-medium text-gray-700 mb-2">Metric</label>
@@ -480,16 +485,21 @@ export const HistoricalPerformanceSection: React.FC = () => {
                 <LineChart 
                   data={processedHistoricalData}
                   style={{ willChange: 'transform' }}
+                  margin={{ top: 10, right: 10, left: 0, bottom: 40 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="month_year" 
-                    tick={{ fontSize: 12 }}
-                    angle={-45}
+                    tick={{ fontSize: window.innerWidth < 768 ? 10 : 12 }}
+                    angle={window.innerWidth < 768 ? -60 : -45}
                     textAnchor="end"
-                    height={60}
+                    height={window.innerWidth < 768 ? 80 : 60}
+                    interval={window.innerWidth < 480 ? "preserveStartEnd" : 0}
                   />
-                  <YAxis tick={{ fontSize: 12 }} />
+                  <YAxis 
+                    tick={{ fontSize: window.innerWidth < 768 ? 10 : 12 }}
+                    width={window.innerWidth < 768 ? 50 : 60}
+                  />
                   <Tooltip 
                     formatter={(value, name) => [
                       name === 'total_households' ? formatNumber(Number(value)) : 
@@ -504,13 +514,18 @@ export const HistoricalPerformanceSection: React.FC = () => {
                       return `Period: ${formattedDate}`;
                     }}
                     contentStyle={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.98)',
                       border: '1px solid #e5e7eb',
                       borderRadius: '8px',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                      fontSize: window.innerWidth < 768 ? '12px' : '14px',
+                      padding: window.innerWidth < 768 ? '8px' : '12px'
                     }}
                   />
-                    <Legend />
+                    <Legend 
+                      wrapperStyle={{ fontSize: window.innerWidth < 768 ? '11px' : '14px' }}
+                      iconSize={window.innerWidth < 768 ? 12 : 14}
+                    />
                     {historicalMetric === 'all' && (
                       <>
                   <Line 
@@ -556,16 +571,21 @@ export const HistoricalPerformanceSection: React.FC = () => {
                 <BarChart 
                   data={processedHistoricalData}
                   style={{ willChange: 'transform' }}
+                  margin={{ top: 10, right: 10, left: 0, bottom: 40 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="month_year" 
-                    tick={{ fontSize: 12 }}
-                    angle={-45}
+                    tick={{ fontSize: window.innerWidth < 768 ? 10 : 12 }}
+                    angle={window.innerWidth < 768 ? -60 : -45}
                     textAnchor="end"
-                    height={60}
+                    height={window.innerWidth < 768 ? 80 : 60}
+                    interval={window.innerWidth < 480 ? "preserveStartEnd" : 0}
                   />
-                  <YAxis tick={{ fontSize: 12 }} />
+                  <YAxis 
+                    tick={{ fontSize: window.innerWidth < 768 ? 10 : 12 }}
+                    width={window.innerWidth < 768 ? 50 : 60}
+                  />
                   <Tooltip 
                     formatter={(value, name) => [
                       name === 'total_households' ? formatNumber(Number(value)) : 
@@ -580,13 +600,18 @@ export const HistoricalPerformanceSection: React.FC = () => {
                       return `Period: ${formattedDate}`;
                     }}
                     contentStyle={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.98)',
                       border: '1px solid #e5e7eb',
                       borderRadius: '8px',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                      fontSize: window.innerWidth < 768 ? '12px' : '14px',
+                      padding: window.innerWidth < 768 ? '8px' : '12px'
                     }}
                   />
-                  <Legend />
+                  <Legend 
+                    wrapperStyle={{ fontSize: window.innerWidth < 768 ? '11px' : '14px' }}
+                    iconSize={window.innerWidth < 768 ? 12 : 14}
+                  />
                   {historicalMetric === 'all' && (
                     <>
                       <Bar dataKey="total_households" fill="#10B981" name="Households" />
@@ -608,16 +633,21 @@ export const HistoricalPerformanceSection: React.FC = () => {
                 <AreaChart 
                   data={processedHistoricalData}
                   style={{ willChange: 'transform' }}
+                  margin={{ top: 10, right: 10, left: 0, bottom: 40 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="month_year" 
-                    tick={{ fontSize: 12 }}
-                    angle={-45}
+                    tick={{ fontSize: window.innerWidth < 768 ? 10 : 12 }}
+                    angle={window.innerWidth < 768 ? -60 : -45}
                     textAnchor="end"
-                    height={60}
+                    height={window.innerWidth < 768 ? 80 : 60}
+                    interval={window.innerWidth < 480 ? "preserveStartEnd" : 0}
                   />
-                  <YAxis tick={{ fontSize: 12 }} />
+                  <YAxis 
+                    tick={{ fontSize: window.innerWidth < 768 ? 10 : 12 }}
+                    width={window.innerWidth < 768 ? 50 : 60}
+                  />
                   <Tooltip 
                     formatter={(value, name) => [
                       name === 'total_households' ? formatNumber(Number(value)) : 
@@ -632,13 +662,18 @@ export const HistoricalPerformanceSection: React.FC = () => {
                       return `Period: ${formattedDate}`;
                     }}
                     contentStyle={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.98)',
                       border: '1px solid #e5e7eb',
                       borderRadius: '8px',
-                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+                      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                      fontSize: window.innerWidth < 768 ? '12px' : '14px',
+                      padding: window.innerWidth < 768 ? '8px' : '12px'
                     }}
                   />
-                  <Legend />
+                  <Legend 
+                    wrapperStyle={{ fontSize: window.innerWidth < 768 ? '11px' : '14px' }}
+                    iconSize={window.innerWidth < 768 ? 12 : 14}
+                  />
                   {historicalMetric === 'all' && (
                     <>
                       <Area 
@@ -695,6 +730,7 @@ export const HistoricalPerformanceSection: React.FC = () => {
         </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

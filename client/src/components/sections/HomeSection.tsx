@@ -3,6 +3,7 @@ import axios from 'axios';
 import { MapPin, Users, Calendar, DollarSign, TrendingUp, Globe, Languages, ChevronDown, ChevronUp } from 'lucide-react';
 import { useLanguage } from '../../LanguageContext';
 import moment from 'moment';
+import { Footer } from '../Footer';
 
 interface District {
   id: number;
@@ -373,6 +374,7 @@ export const HomeSection: React.FC = () => {
           )}
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

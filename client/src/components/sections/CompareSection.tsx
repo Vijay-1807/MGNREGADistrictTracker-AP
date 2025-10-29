@@ -5,6 +5,7 @@ import { useLanguage } from '../../LanguageContext';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import moment from 'moment';
 import { BorderBeam } from '../ui/border-beam';
+import { Footer } from '../Footer';
 
 // Custom hook for responsive chart height with debouncing
 const useChartHeight = () => {
@@ -22,7 +23,11 @@ const useChartHeight = () => {
         const width = window.innerWidth;
         let newHeight = 400;
         
-        if (width >= 2560) newHeight = 600;
+        // Mobile-first responsive heights
+        if (width < 480) newHeight = 300; // Very small mobile
+        else if (width < 640) newHeight = 350; // Small mobile
+        else if (width < 768) newHeight = 380; // Tablet portrait
+        else if (width >= 2560) newHeight = 600;
         else if (width >= 1920) newHeight = 500;
         else if (width >= 1400) newHeight = 450;
         else newHeight = 400;
@@ -235,14 +240,14 @@ export const CompareSection: React.FC = () => {
     <div className="compare-section page">
       <div className="container">
         <div className="section-header text-center">
-          <h1 className="section-title text-xl md:text-2xl lg:text-3xl font-medium text-gray-800 mb-4">
+          <h1 className="section-title text-xl md:text-2xl lg:text-3xl font-medium text-gray-800 mb-1">
             <GitCompare className="section-icon inline-block mr-3" />
             District Comparison Tool
           </h1>
         </div>
 
         {/* Enhanced controls with modern UI */}
-        <div className="toolbar glass-card mb-6">
+        <div className="toolbar glass-card mb-2">
           <div className="comparison-controls flex flex-wrap gap-6 justify-center items-center p-4">
             <div className="control-group flex flex-col items-center">
               <label className="text-sm font-medium text-gray-700 mb-2">Select Month</label>
@@ -315,8 +320,8 @@ export const CompareSection: React.FC = () => {
           </div>
         </div>
 
-        <div className="district-search mb-6">
-          <div className="search-container flex items-center justify-center mb-4">
+        <div className="district-search mb-2">
+          <div className="search-container flex items-center justify-center mb-2">
             <div className="relative w-full max-w-md">
                <input
                 type="text"
@@ -396,20 +401,27 @@ export const CompareSection: React.FC = () => {
             <ResponsiveContainer width="100%" height={chartHeight}>
               <BarChart 
                 data={processedChartData} 
-                barCategoryGap={20} 
-                margin={{ top: 10, right: 20, left: 10, bottom: 0 }}
+                barCategoryGap={window.innerWidth < 768 ? 10 : 20} 
+                margin={{ 
+                  top: 10, 
+                  right: window.innerWidth < 768 ? 10 : 20, 
+                  left: window.innerWidth < 768 ? -10 : 10, 
+                  bottom: window.innerWidth < 768 ? 50 : 0 
+                }}
                 style={{ willChange: 'transform' }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis 
                   dataKey="district_name" 
-                  tick={{ fontSize: 12 }}
-                  angle={-45}
+                  tick={{ fontSize: window.innerWidth < 768 ? 10 : 12 }}
+                  angle={window.innerWidth < 768 ? -60 : -45}
                   textAnchor="end"
-                  height={60}
+                  height={window.innerWidth < 768 ? 80 : 60}
+                  interval={window.innerWidth < 480 ? "preserveStartEnd" : 0}
                 />
                 <YAxis 
-                  tick={{ fontSize: 12 }} 
+                  tick={{ fontSize: window.innerWidth < 768 ? 10 : 12 }}
+                  width={window.innerWidth < 768 ? 50 : 60}
                   allowDecimals={false} 
                   tickFormatter={(val) => comparisonMetric === 'total_amount_spent' ? formatNumber(Number(val)) : formatNumber(Number(val))} 
                 />
@@ -422,11 +434,19 @@ export const CompareSection: React.FC = () => {
                     ];
                   }}
                   labelFormatter={(label) => `${label}`}
+                  contentStyle={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                    fontSize: window.innerWidth < 768 ? '12px' : '14px',
+                    padding: window.innerWidth < 768 ? '8px' : '12px'
+                  }}
                 />
                 <Bar 
                   dataKey={`${comparisonMetric}_display`} 
                   fill={comparisonMetric === 'total_households' ? '#10B981' : comparisonMetric === 'total_person_days' ? '#3B82F6' : '#F59E0B'} 
-                  maxBarSize={48} 
+                  maxBarSize={window.innerWidth < 768 ? 35 : 48} 
                   isAnimationActive={false}
                 />
               </BarChart>
@@ -449,6 +469,7 @@ export const CompareSection: React.FC = () => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 };
