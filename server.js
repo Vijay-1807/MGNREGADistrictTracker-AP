@@ -11,6 +11,8 @@ const moment = require('moment');
 require('dotenv').config();
 
 const app = express();
+// Behind Render's proxy; enables correct client IP detection for rate limiting
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 3000;
 const READ_ONLY_DB = process.env.READ_ONLY_DB === '1';
 
