@@ -1,10 +1,5 @@
 # MGNREGA District Performance Tracker
 
-## Submission
-
-- **Hosted URL**: [Your VPS/VM URL here - e.g., http://your-server-ip:3000]
-- **Loom Walkthrough**: [Your Loom video link here - <2 minutes]
-
 ## Project Overview
 
 ## Features
